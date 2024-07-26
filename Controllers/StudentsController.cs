@@ -2,6 +2,7 @@
 using Newtonsoft.Json;
 using SchoolManagementSystem.Models;
 using System.Net.Http.Headers;
+using System.Net.Http.Json;
 
 namespace SchoolManagementSystem.Controllers
 {
@@ -86,27 +87,23 @@ namespace SchoolManagementSystem.Controllers
             }
         }
         //Edit
-        [HttpPut]
-        public async Task<IActionResult> Edit(int id)
+        public async Task<IActionResult> Edit(int id, Student student)
         {
-            Student studentDetails = new Student();
             using (var _httpClient = new HttpClient())
             {
                 _httpClient.BaseAddress = new Uri(baseUrl + $"api/Students/{id}");
                 _httpClient.DefaultRequestHeaders.Accept.Clear();
                 _httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
-                HttpResponseMessage response = await _httpClient.GetAsync("");
+                HttpResponseMessage response = await _httpClient.PostAsJsonAsync("", student);
                 if (response.IsSuccessStatusCode)
                 {
-                    string result = response.Content.ReadAsStringAsync().Result;
-                    studentDetails = JsonConvert.DeserializeObject<Student>(result);
+                    return RedirectToAction("Index");
                 }
                 else
                 {
                     return View("ErrorPage");
                 }
-                return View(studentDetails);
             }
         }
     }
