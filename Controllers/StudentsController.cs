@@ -29,7 +29,7 @@ namespace SchoolManagementSystem.Controllers
                     return View("ErrorPage");
                 }
             }
-            return View();
+            return View(lststudents);
         }
         //error page
         public IActionResult ErrorPage()
