@@ -36,6 +36,32 @@ namespace SchoolManagementSystem.Controllers
         {
             return View();
         }
+        //create student
+        public IActionResult Create()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Create(Student student)
+        {
+            using (var _httpClient = new HttpClient())
+            {
+                _httpClient.BaseAddress = new Uri(baseUrl + "api/Students");
+                _httpClient.DefaultRequestHeaders.Accept.Clear();
+                _httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+                HttpResponseMessage response = await _httpClient.PostAsJsonAsync("",student);
+                if (response.IsSuccessStatusCode)
+                {
+                    return RedirectToAction("Index");
+                }
+                else
+                {
+                    return View("ErrorPage");
+                }
+            }
+        }
 
     }
 }
